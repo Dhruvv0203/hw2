@@ -1,30 +1,114 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:calculator_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Calculator UI elements should be present', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
 
-    // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+    expect(find.text('3'), findsOneWidget);
+    expect(find.text('4'), findsOneWidget);
+    expect(find.text('5'), findsOneWidget);
+    expect(find.text('6'), findsOneWidget);
+    expect(find.text('7'), findsOneWidget);
+    expect(find.text('8'), findsOneWidget);
+    expect(find.text('9'), findsOneWidget);
+    expect(find.text('+'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
+    expect(find.text('*'), findsOneWidget);
+    expect(find.text('/'), findsOneWidget);
+    expect(find.text('='), findsOneWidget);
+    expect(find.text('C'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Calculator should perform addition', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('2'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.text('+'));
+    await tester.pump();
+
+    await tester.tap(find.text('3'));
+    await tester.pump();
+
+    await tester.tap(find.text('='));
+    await tester.pump();
+
+    expect(find.text('5.0'), findsOneWidget);
+  });
+
+  testWidgets('Calculator should perform subtraction', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('8'));
+    await tester.pump();
+
+    await tester.tap(find.text('-'));
+    await tester.pump();
+
+    await tester.tap(find.text('3'));
+    await tester.pump();
+
+    await tester.tap(find.text('='));
+    await tester.pump();
+
+    expect(find.text('5.0'), findsOneWidget);
+  });
+
+  testWidgets('Calculator should perform multiplication', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('6'));
+    await tester.pump();
+
+    await tester.tap(find.text('*'));
+    await tester.pump();
+
+    await tester.tap(find.text('4'));
+    await tester.pump();
+
+    await tester.tap(find.text('='));
+    await tester.pump();
+
+    expect(find.text('24.0'), findsOneWidget);
+  });
+
+  testWidgets('Calculator should perform division', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('9'));
+    await tester.pump();
+
+    await tester.tap(find.text('/'));
+    await tester.pump();
+
+    await tester.tap(find.text('3'));
+    await tester.pump();
+
+    await tester.tap(find.text('='));
+    await tester.pump();
+
+    expect(find.text('3.0'), findsOneWidget);
+  });
+
+  testWidgets('Calculator should clear display when C is pressed', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('7'));
+    await tester.pump();
+
+    await tester.tap(find.text('C'));
+    await tester.pump();
+
+    expect(find.byWidgetPredicate((widget) =>
+  widget is Text && widget.data == '0' && widget.style?.fontSize == 48.0
+), findsOneWidget);
+
+
   });
 }
