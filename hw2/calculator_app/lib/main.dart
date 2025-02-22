@@ -8,8 +8,8 @@ class CalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CalculatorApp',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      title: 'Advanced Calculator',
+      theme: ThemeData.dark(),  // Dark theme like iOS Calculator
       home: const CalculatorHome(),
     );
   }
@@ -23,67 +23,51 @@ class CalculatorHome extends StatefulWidget {
 }
 
 class CalculatorHomeState extends State<CalculatorHome> {
-  String displayText = "";
-  double? firstOperand;
-  String? operator;
-  bool shouldResetDisplay = false;
+  String expression = "";  // Stores full equation (e.g., 2+3=)
+  String result = "0";  // Stores the result
 
   void buttonPressed(String value) {
     setState(() {
       if (value == 'C') {
-    setState(() {
-        displayText = "0";  // Set display to "0" after clearing
-        firstOperand = null;
-        operator = null;
-    });
-  } else if (value == '+' || value == '-' || value == '*' || value == '/') {
-        if (displayText.isNotEmpty) {
-          firstOperand = double.tryParse(displayText);
-          operator = value;
-          shouldResetDisplay = true;
-        }
+        expression = "";
+        result = "0";
       } else if (value == '=') {
-        if (firstOperand != null && operator != null && displayText.isNotEmpty) {
-          double secondOperand = double.tryParse(displayText) ?? 0;
-          double result = 0;
-
-          if (operator == '+') {
-            result = firstOperand! + secondOperand;
-          } else if (operator == '-') {
-            result = firstOperand! - secondOperand;
-          } else if (operator == '*') {
-            result = firstOperand! * secondOperand;
-          } else if (operator == '/') {
-            result = secondOperand == 0 ? double.nan : firstOperand! / secondOperand;
-          }
-
-          displayText = result.toString();
-          firstOperand = null;
-          operator = null;
+        try {
+          result = evaluateExpression(expression).toString();
+          expression += " =";  // Show the full equation before resetting
+        } catch (e) {
+          result = "Error";
         }
       } else {
-        if (shouldResetDisplay) {
-          displayText = value;
-          shouldResetDisplay = false;
-        } else {
-          displayText += value;
+        if (expression.endsWith("=")) {
+          expression = "";  // Reset if a new calculation starts
         }
+        expression += value;
       }
     });
+  }
+
+  double evaluateExpression(String exp) {
+    try {
+      return double.parse(
+        exp.replaceAll('×', '*').replaceAll('÷', '/')
+      ); // Simple parsing for now
+    } catch (e) {
+      return double.nan;
+    }
   }
 
   Widget buildButton(String value, {Color color = Colors.grey}) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: MaterialButton(
-          color: color,
-          padding: const EdgeInsets.all(24.0),
-          onPressed: () => buttonPressed(value),
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 20, color: Colors.white),
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            padding: const EdgeInsets.all(20),
           ),
+          onPressed: () => buttonPressed(value),
+          child: Text(value, style: const TextStyle(fontSize: 28)),
         ),
       ),
     );
@@ -92,57 +76,33 @@ class CalculatorHomeState extends State<CalculatorHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CalculatorApp'),
-      ),
+      backgroundColor: Colors.black, // Dark theme
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Expanded(
             child: Container(
               alignment: Alignment.bottomRight,
-              padding: const EdgeInsets.all(24.0),
-              child: Text(
-                displayText,
-                style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w500),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(expression, style: const TextStyle(fontSize: 32, color: Colors.white54)),
+                  Text(result, style: const TextStyle(fontSize: 64, color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
               ),
             ),
           ),
           Column(
             children: [
-              Row(
-                children: [
-                  buildButton("7"),
-                  buildButton("8"),
-                  buildButton("9"),
-                  buildButton("/", color: Colors.orange),
-                ],
-              ),
-              Row(
-                children: [
-                  buildButton("4"),
-                  buildButton("5"),
-                  buildButton("6"),
-                  buildButton("*", color: Colors.orange),
-                ],
-              ),
-              Row(
-                children: [
-                  buildButton("1"),
-                  buildButton("2"),
-                  buildButton("3"),
-                  buildButton("-", color: Colors.orange),
-                ],
-              ),
-              Row(
-                children: [
-                  buildButton("0"),
-                  buildButton("C", color: Colors.red),
-                  buildButton("=", color: Colors.green),
-                  buildButton("+", color: Colors.orange),
-                ],
-              ),
+              Row(children: [buildButton("AC", color: Colors.grey), buildButton("+/-", color: Colors.grey), buildButton("%", color: Colors.grey), buildButton("÷", color: Colors.orange)]),
+              Row(children: [buildButton("7"), buildButton("8"), buildButton("9"), buildButton("×", color: Colors.orange)]),
+              Row(children: [buildButton("4"), buildButton("5"), buildButton("6"), buildButton("-", color: Colors.orange)]),
+              Row(children: [buildButton("1"), buildButton("2"), buildButton("3"), buildButton("+", color: Colors.orange)]),
+              Row(children: [buildButton("0"), buildButton(".", color: Colors.grey), buildButton("C", color: Colors.red), buildButton("=", color: Colors.orange)]),
             ],
-          )
+          ),
         ],
       ),
     );
