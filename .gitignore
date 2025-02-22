@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/../../Act04/
+/../../CW1/
+/../../weather_info_app/
