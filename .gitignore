@@ -18,31 +18,66 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Flutter/Dart related
 .dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
+.packages
+pubspec.lock
+*.flutter-plugins
+*.flutter-plugins-dependencies
+android/.gradle/
+android/app/build/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Generated.xcconfig
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeral/
+linux/flutter/
+web/.dart_tool/
+windows/flutter/
+build/
+firebase_app_id_file.json
 
-# Symbolication related
-app.*.symbols
+# Xcode / iOS related
+xcuserdata/
+DerivedData/
+*.xcworkspace
+*.xcuserstate
 
-# Obfuscation related
-app.*.map.json
+# Node.js related
+node_modules/
+npm-debug.log
+yarn.lock
+.pnpm-debug.log
+.eslintcache
+.parcel-cache/
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-/../../Act04/
-/../../CW1/
-/../../weather_info_app/
+# VS Code related
+.vscode/
+*.code-workspace
+
+# Python related
+__pycache__/
+.env
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Java related
+*.jar
+*.war
+*.ear
+
+# Ignore specific directories (User Requested)
+Act04/
+CW1/
+CW2/
+act_2/
+app04/
+cw/
+junk/
+toggle/
+weather/
+weather_info_app/
+hw2/hw2/
+
